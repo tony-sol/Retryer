@@ -40,11 +40,11 @@ interface RetryerInterface
     /**
      * With breaking execution exceptions
      *
-     * @param class-string[] $allowedExceptions Exceptions that will not be thrown.
+     * @param class-string[] $breakingExceptions Exceptions that will not be thrown.
      *
      * @return static
      */
-    public function withBreakingExceptions(array $allowedExceptions): RetryerInterface;
+    public function withBreakingExceptions(array $breakingExceptions): RetryerInterface;
 
     /**
      * Should retryer use exponential backoff policy

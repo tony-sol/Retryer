@@ -8,8 +8,7 @@ class Retryer implements RetryerInterface
 {
     protected const DEFAULT_LINEAR_MULTIPLIER = 1.0;
 
-    protected \Closure $action = static function (): void {
-    };
+    protected \Closure $action;
 
     protected int $times = 1;
 
@@ -33,6 +32,8 @@ class Retryer implements RetryerInterface
      */
     public function __construct()
     {
+        $this->action = static function (): void {
+        };
     }
 
     /**
@@ -87,13 +88,13 @@ class Retryer implements RetryerInterface
     /**
      * {@inheritdoc}
      *
-     * @param class-string[] $allowedExceptions Exceptions that will not be thrown.
+     * @param class-string[] $breakingExceptions Exceptions that will not be thrown.
      *
      * @return static
      */
-    public function withBreakingExceptions(array $allowedExceptions): self
+    public function withBreakingExceptions(array $breakingExceptions): self
     {
-        $this->breakingExceptions = $allowedExceptions;
+        $this->breakingExceptions = $breakingExceptions;
         return $this;
     }
 

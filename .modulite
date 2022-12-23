@@ -1,0 +1,8 @@
+name: "@Retryer"
+namespace: "Retryer\\"
+
+export:
+    - "Retryer"
+    - "RetryerInterface"
+
+require:

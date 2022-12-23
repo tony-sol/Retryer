@@ -16,7 +16,8 @@
         "phpunit/phpunit": "^9",
         "phpstan/phpstan": "^1",
         "squizlabs/php_codesniffer": "^3",
-        "vimeo/psalm": "^4"
+        "vimeo/psalm": "^4",
+        "vkcom/modulite-phpstan": "^1"
     },
     "config": {
         "allow-plugins": {
@@ -26,6 +27,11 @@
     "autoload": {
         "psr-4": {
             "Retryer\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Retryer\\Tests\\": "tests/"
         }
     }
 }
