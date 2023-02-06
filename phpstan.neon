@@ -1,5 +1,5 @@
 parameters:
-    errorFormat: github
+    errorFormat: teamcity
     level: 6
     paths:
         - src
