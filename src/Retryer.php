@@ -85,28 +85,12 @@ class Retryer implements RetryerInterface
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @param class-string[] $breakingExceptions Exceptions that will not be thrown.
-     *
-     * @return static
-     */
     public function withBreakingExceptions(array $breakingExceptions): self
     {
         $this->breakingExceptions = $breakingExceptions;
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @param boolean $isEnabled Pass false to disable exponential backoff policy.
-     *
-     * @throws Exception\MutuallyExclusiveBackoffPolicyException
-     *
-     * @return static
-     */
     public function useExponentialBackoff(bool $isEnabled = true): self
     {
         if ($isEnabled && ($this->linearBackoffMultiplier !== static::DEFAULT_LINEAR_MULTIPLIER)) {
@@ -118,15 +102,6 @@ class Retryer implements RetryerInterface
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @param float $linearBackoffMultiplier Should be positive, default is 1.
-     *
-     * @throws Exception\MutuallyExclusiveBackoffPolicyException
-     *
-     * @return static
-     */
     public function useLinearBackoffMultiplier(float $linearBackoffMultiplier): self
     {
         if ($this->isExponentialBackoff && ($linearBackoffMultiplier !== static::DEFAULT_LINEAR_MULTIPLIER)) {
@@ -138,24 +113,12 @@ class Retryer implements RetryerInterface
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return static
-     */
     public function throwExceptionOnLastTry(): self
     {
         $this->isThrowExceptionOnLastTry = true;
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @throws \Throwable
-     *
-     * @return mixed
-     */
     public function execute(): mixed
     {
         $result = null;
@@ -170,16 +133,6 @@ class Retryer implements RetryerInterface
         return $result;
     }
 
-    /**
-     * Check should throwable be thrown
-     *
-     * @param \Throwable $throwable Catched exception.
-     * @param integer    $iteration Number of current iteration.
-     *
-     * @throws \Throwable
-     *
-     * @return void
-     */
     protected function checkThrowable(\Throwable $throwable, int $iteration): void
     {
         $isThrowExceptionOnLastTry = $this->isThrowExceptionOnLastTry && $iteration >= $this->times;
@@ -189,13 +142,6 @@ class Retryer implements RetryerInterface
         }
     }
 
-    /**
-     * Sleep between iterations depends on backoff policy
-     *
-     * @param integer $iteration Current iteration number.
-     *
-     * @return void
-     */
     protected function delay(int $iteration): void
     {
         if ($iteration >= $this->times) {
@@ -213,23 +159,11 @@ class Retryer implements RetryerInterface
         }
     }
 
-    /**
-     * Modify delay by exponential backoff policy
-     *
-     * @param integer $iteration Current iteration number.
-     *
-     * @return integer
-     */
     private function applyExponentialBackoff(int $iteration): int
     {
         return ($this->delay << $iteration);
     }
 
-    /**
-     * Modify delay by linear backoff policy
-     *
-     * @return integer
-     */
     private function applyLinearBackoff(): int
     {
         return (int)($this->delay * $this->linearBackoffMultiplier);
