@@ -8,24 +8,20 @@ class Retryer implements RetryerInterface
 {
     protected const DEFAULT_LINEAR_MULTIPLIER = 1.0;
 
-    protected \Closure $action;
+    protected  $action;
 
-    protected int $times = 1;
+    protected  $times = 1;
 
-    protected int $delay = 0;
+    protected  $delay = 0;
 
-    /**
-     * List of Exceptions which can break retry loop
-     *
-     * @var string[]
-     */
-    protected array $breakingExceptions = [];
 
-    protected bool $isExponentialBackoff = false;
+    protected  $breakingExceptions = [];
 
-    protected float $linearBackoffMultiplier = self::DEFAULT_LINEAR_MULTIPLIER;
+    protected  $isExponentialBackoff = false;
 
-    protected bool $isThrowExceptionOnLastTry = false;
+    protected  $linearBackoffMultiplier = self::DEFAULT_LINEAR_MULTIPLIER;
+
+    protected  $isThrowExceptionOnLastTry = false;
 
     /**
      * Empty constructor
@@ -36,29 +32,14 @@ class Retryer implements RetryerInterface
         };
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @param \Closure $action Action you want to execute.
-     *
-     * @return static
-     */
-    public function do(\Closure $action): self
+    public function do( $action): self
     {
         $this->action = $action;
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @param integer $times Number of times to execute your action.
-     *
-     * @throws Exception\InvalidRetryTimesException
-     *
-     * @return static
-     */
-    public function times(int $times): self
+
+    public function times( $times): self
     {
         if ($times <= 0) {
             throw new Exception\InvalidRetryTimesException("Tried to set {$times} retry times");
@@ -67,16 +48,7 @@ class Retryer implements RetryerInterface
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @param integer $delay Microseconds between iterations.
-     *
-     * @throws Exception\InvalidDelayException
-     *
-     * @return static
-     */
-    public function withDelay(int $delay): self
+    public function withDelay( $delay): self
     {
         if ($delay < 0) {
             throw new Exception\InvalidDelayException("Tried to set {$delay} as delay");
@@ -85,13 +57,13 @@ class Retryer implements RetryerInterface
         return $this;
     }
 
-    public function withBreakingExceptions(array $breakingExceptions): self
+    public function withBreakingExceptions( $breakingExceptions): self
     {
         $this->breakingExceptions = $breakingExceptions;
         return $this;
     }
 
-    public function useExponentialBackoff(bool $isEnabled = true): self
+    public function useExponentialBackoff( $isEnabled = true): self
     {
         if ($isEnabled && ($this->linearBackoffMultiplier !== static::DEFAULT_LINEAR_MULTIPLIER)) {
             throw new Exception\MutuallyExclusiveBackoffPolicyException(
@@ -102,7 +74,7 @@ class Retryer implements RetryerInterface
         return $this;
     }
 
-    public function useLinearBackoffMultiplier(float $linearBackoffMultiplier): self
+    public function useLinearBackoffMultiplier( $linearBackoffMultiplier)
     {
         if ($this->isExponentialBackoff && ($linearBackoffMultiplier !== static::DEFAULT_LINEAR_MULTIPLIER)) {
             throw new Exception\MutuallyExclusiveBackoffPolicyException(
@@ -113,13 +85,13 @@ class Retryer implements RetryerInterface
         return $this;
     }
 
-    public function throwExceptionOnLastTry(): self
+    public function throwExceptionOnLastTry()
     {
         $this->isThrowExceptionOnLastTry = true;
         return $this;
     }
 
-    public function execute(): mixed
+    public function execute()
     {
         $result = null;
         for ($iteration = 1; $iteration <= $this->times; $iteration++) {
